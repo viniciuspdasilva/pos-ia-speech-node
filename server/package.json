@@ -1,0 +1,8 @@
+{
+  "name": "pos-ia-node-server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Vinicius Pereira da Silva",
+  "license": "MIT",
+  "private": false
+}

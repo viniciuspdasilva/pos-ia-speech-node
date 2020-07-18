@@ -1,0 +1,27 @@
+<div class="container mt-3">
+  <h1>Review in speech</h1>
+
+  <h4>Gostaria de brincar com uma machine learning?</h4>
+
+  <div class="mt-5">
+    <p>
+      Essa brincadeira tem a intenção de mostrar alguns aspectos da machine learning.
+    </p>
+    <p>Então vamos iniciar ?</p>
+  </div>
+
+  <div class="mt-5 w-100 micphinput">
+    <mat-form-field appearance="outline">
+      <mat-label>Voce pode escolher entre digitar ou falar via microfone</mat-label>
+      <textarea matNativeControl [formControl]="microfoneForm"></textarea>
+    </mat-form-field>
+    <div>
+      <button mat-icon-button (click)="
+        !this.isRecording ? emitRecord() : stopRecording()">
+        <mat-icon>
+          {{iconMicrophone}}
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ApiHttpService} from '../../services/api/api-http.service';
 import { environment } from '../../../environments/environment';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 export interface DialogData {
   recordBlob: any;
@@ -16,20 +17,30 @@ export interface DialogData {
 
 export class ModalConfirmacaoComponent implements OnInit {
   urlBlob: any;
-  public formData = new FormData();
+  public uploadForm: FormGroup;
+  public formData: FormData;
   constructor(
     public dialogRef: MatDialogRef<ModalConfirmacaoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private sanitizer: DomSanitizer,
-    private api: ApiHttpService<any>
+    private api: ApiHttpService<any>,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.urlBlob = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(this.data.recordBlob.blob));
+    this.uploadForm = this.formBuilder.group({
+      audio: [this.urlBlob]
+    });
   }
 
   enviar(): any {
-    this.api.post(environment.url.api.concat('/api/speech/audio'), this.data.recordBlob)
+    this.formData = new FormData();
+    const file = new File([this.data.recordBlob], 'file', {
+      type: this.data.recordBlob.type
+    });
+    this.formData.append('audio', file);
+    this.api.post(environment.url.api.concat('/api/v1/speech-to-text'), this.data.recordBlob.blob)
       .subscribe(
         (response) => {
           console.log(response);
@@ -40,4 +51,10 @@ export class ModalConfirmacaoComponent implements OnInit {
       );
   }
 
+  onFileSelect($event): void {
+      if ($event.target.files.length > 0) {
+        const file = $event.target.files[0];
+        this.uploadForm.get('audio').setValue(file);
+      }
+  }
 }

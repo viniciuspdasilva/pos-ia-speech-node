@@ -1,0 +1,35 @@
+const storage = multer.memoryStorage()
+    const upload = multer({
+        storage,
+        limits: {
+            fields: 1,
+            fileSize: 6000000,
+            files: 1,
+            parts: 2
+        }
+    })
+    return upload.single('audio')(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({message: "Upload não realizado com sucesso".concat(err)})
+        }
+        const params = {
+            objectMode: true,
+            contentType: 'audio/wav',
+            model: 'pt-BR_BroadbandModel',
+            keywordsThreshold: 0.5,
+            maxAlternatives: 3
+        }
+        console.log(req.file)
+        const recognizeStream = api.recognizeUsingWebSocket(params);
+        file = fs.createReadStream(req.file.buffer);
+
+        file.on('open', function (file) {
+            console.log(file);
+            file.pipe(recognizeStream);
+
+        });
+
+        file.on('error', function (error) {
+            return res.status(500).json(error);
+        })
+    });

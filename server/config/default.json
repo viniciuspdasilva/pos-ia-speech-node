@@ -1,0 +1,13 @@
+{
+  "server": {
+    "port": 3000
+  },
+  "api":{
+    "ibm": {
+      "speech": {
+        "key": "8mmRiDi4dO5LVaMKurWAwbU0q2IS4arE0BpEGowSwQk1",
+        "url": "https://api.us-south.speech-to-text.watson.cloud.ibm.com/instances/268b7b1c-7dbd-4929-9d09-5d6c0d755f2b"
+      }
+    }
+  }
+}

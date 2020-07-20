@@ -10,7 +10,8 @@ export class ApiHttpService<T> {
   constructor(private http: HttpClient) {
   }
 
-  public post(url, formData: Blob): Observable<HttpResponse<T>> {
+  public post(url, formData: Blob | string | any): Observable<HttpResponse<T>> {
+    console.log(formData);
     return this.http.post<HttpResponse<T>>(url, formData);
   }
 }

@@ -7,6 +7,10 @@
       "speech": {
         "key": "8mmRiDi4dO5LVaMKurWAwbU0q2IS4arE0BpEGowSwQk1",
         "url": "https://api.us-south.speech-to-text.watson.cloud.ibm.com/instances/268b7b1c-7dbd-4929-9d09-5d6c0d755f2b"
+      },
+      "text": {
+        "key": "C81LSjT9xgCV0Abaqjzu_SN5uXLFxcu7-fJjIIJBRAhb",
+        "url": "https://api.us-south.text-to-speech.watson.cloud.ibm.com/instances/a938539b-0e26-4025-ad2b-13a2815f2de8"
       }
     }
   }

@@ -1,9 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {AudioRecordingService} from '../../services/audio-recording.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ModalConfirmacaoComponent} from '../modal-confirmacao/modal-confirmacao.component';
 import {MatDialog} from '@angular/material/dialog';
+import {environment} from '../../../environments/environment';
+import {ApiHttpService} from '../../services/api/api-http.service';
 
 @Component({
   selector: 'app-index',
@@ -13,7 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 export class IndexComponent implements OnInit, OnDestroy {
 
   iconMicrophone = 'mic';
-  microfoneForm = new FormControl('');
+  microfoneForm: FormGroup;
   isRecording = false;
   recordedTime;
   blobUrl;
@@ -22,8 +24,11 @@ export class IndexComponent implements OnInit, OnDestroy {
   constructor(
     private audioRecordingService: AudioRecordingService,
     private sanitizer: DomSanitizer,
-    public dialog: MatDialog
-    ) { }
+    public dialog: MatDialog,
+    private fb: FormBuilder,
+    private api: ApiHttpService<any>
+  ) {
+  }
 
   ngOnInit(): void {
     this.audioRecordingService.recordingFailed().subscribe(() => {
@@ -36,6 +41,10 @@ export class IndexComponent implements OnInit, OnDestroy {
 
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
       this.blobUrl = data.stream;
+    });
+
+    this.microfoneForm = this.fb.group({
+      text: ['']
     });
   }
 
@@ -76,7 +85,7 @@ export class IndexComponent implements OnInit, OnDestroy {
     }
   }
 
-  clearRecordedData(): void  {
+  clearRecordedData(): void {
     this.blobUrl = null;
   }
 
@@ -84,4 +93,24 @@ export class IndexComponent implements OnInit, OnDestroy {
     this.abortRecording();
   }
 
+  enviar(): void {
+    const body = {
+      text: this.microfoneForm.get('text').value
+    };
+    this.api.post(environment.url.api.concat('/api/v1/text-to-speech'), body)
+      .subscribe(
+        (response) => {
+          console.log(response);
+          this.dialog.open(ModalConfirmacaoComponent, {
+            data: {
+              recordBlob: response.data
+            }
+          });
+
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
 }

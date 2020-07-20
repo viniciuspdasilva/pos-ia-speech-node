@@ -6,6 +6,7 @@ const ObjectID = mongodb.ObjectID
 const {Readable} = require('stream')
 const multipart = require('connect-multiparty')
 const multipartMiddleware = multipart({uploadDir: './'})
+const textToSpeechV1 = require('../api/text-to-speech')
 module.exports = (db) => {
     const ApiController = {}
 
@@ -43,6 +44,28 @@ module.exports = (db) => {
             ;
         })
 
+    }
+    ApiController.text = (req, res) => {
+        const params = {
+            text: req.body.text,
+            accept: 'audio/wav',
+            voice: 'pt-BR_IsabelaV3Voice'
+        }
+
+        return textToSpeechV1.synthesize(params)
+            .then(response => {
+               return textToSpeechV1.repairWavHeaderStream(response.result);
+            })
+            .then(buffer => {
+                const name = 'transcription';
+                res.setHeader('Content-Disposition', 'attachment; filename=' + name);
+                res.setHeader('Content-type', 'audio/wav');
+
+                res.status(200).json(buffer);
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
     return ApiController;
 }

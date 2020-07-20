@@ -11,10 +11,17 @@
   </div>
 
   <div class="mt-5 w-100 micphinput">
-    <mat-form-field appearance="outline">
-      <mat-label>Voce pode escolher entre digitar ou falar via microfone</mat-label>
-      <textarea matNativeControl [formControl]="microfoneForm"></textarea>
-    </mat-form-field>
+    <form [formGroup]="microfoneForm" (ngSubmit)="enviar()">
+      <mat-form-field appearance="outline">
+        <mat-label>Voce pode escolher entre digitar ou falar via microfone</mat-label>
+        <textarea matNativeControl formControlName="text" name="text"></textarea>
+      </mat-form-field>
+      <div>
+        <button mat-flat-button type="submit" color="warn">
+          Enviar
+        </button>
+      </div>
+    </form>
     <div>
       <button mat-icon-button (click)="
         !this.isRecording ? emitRecord() : stopRecording()">

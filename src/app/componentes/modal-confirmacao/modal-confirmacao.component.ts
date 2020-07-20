@@ -2,8 +2,9 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ApiHttpService} from '../../services/api/api-http.service';
-import { environment } from '../../../environments/environment';
+import {environment} from '../../../environments/environment';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
 
 export interface DialogData {
   recordBlob: any;
@@ -24,7 +25,8 @@ export class ModalConfirmacaoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private sanitizer: DomSanitizer,
     private api: ApiHttpService<any>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -43,10 +45,20 @@ export class ModalConfirmacaoComponent implements OnInit {
     this.api.post(environment.url.api.concat('/api/v1/speech-to-text'), this.data.recordBlob.blob)
       .subscribe(
         (response) => {
-          console.log(response);
+          this.dialogRef.close();
+          this.router.navigate(['resposta'], {
+            queryParams: {
+              resposta: response
+            }
+          });
         },
         (error) => {
-          console.log(error);
+          this.dialogRef.close();
+          this.router.navigate(['resposta'], {
+            queryParams: {
+              resposta: error
+            }
+          });
         }
       );
   }

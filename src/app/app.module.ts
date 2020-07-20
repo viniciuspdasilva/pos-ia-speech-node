@@ -14,12 +14,14 @@ import {MatButtonModule} from '@angular/material/button';
 import { ModalConfirmacaoComponent } from './componentes/modal-confirmacao/modal-confirmacao.component';
 import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {HttpClientModule} from '@angular/common/http';
+import { RespostaComponent } from './componentes/resposta/resposta.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IndexComponent,
-    ModalConfirmacaoComponent
+    ModalConfirmacaoComponent,
+    RespostaComponent
   ],
   imports: [
     BrowserModule,

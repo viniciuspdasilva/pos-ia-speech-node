@@ -25,7 +25,7 @@
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
     "bootstrap": "^4.5.0",
     "ibm-watson": "^5.6.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "recordrtc": "^5.6.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
